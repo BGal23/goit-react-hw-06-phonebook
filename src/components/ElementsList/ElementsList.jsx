@@ -1,16 +1,21 @@
-import PropTypes from 'prop-types';
+import ElementItem from '../ElementItem/ElementItem';
+import { getContacts, getFiltersStatus } from '../../redux/selectors';
+import { useSelector } from 'react-redux';
 
-const ElementsList = ({ persons, filter, delateContact }) => {
-  const list = persons
-    .filter(contact => contact.name.toLowerCase().includes(filter))
-    .map(contact => (
-      <li key={contact.id}>
-        {contact.name} {contact.number}{' '}
-        <button type="button" onClick={() => delateContact(contact.id)}>
-          Delete
-        </button>
-      </li>
-    ));
+const filterContact = (contacts, filterStatus) => {
+  return contacts.filter(contact =>
+    contact.name.toLowerCase().includes(filterStatus)
+  );
+};
+
+const ElementsList = () => {
+  const contacts = useSelector(getContacts);
+  const filterStatus = useSelector(getFiltersStatus);
+  const filter = filterContact(contacts, filterStatus);
+
+  const list = filter.map(contact => (
+    <ElementItem key={contact.id} contact={contact} />
+  ));
   return (
     <>
       <ul>{list}</ul>
@@ -19,9 +24,3 @@ const ElementsList = ({ persons, filter, delateContact }) => {
 };
 
 export default ElementsList;
-
-ElementsList.propTypes = {
-  person: PropTypes.array,
-  delateContact: PropTypes.func,
-  filter: PropTypes.string,
-};

@@ -1,6 +1,13 @@
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { setFilterStatus } from '../../redux/filtersSlice';
 
-const Filter = ({ filtered }) => {
+const Filter = () => {
+  const dispatch = useDispatch();
+  const filtered = newFilterStatus => {
+    const filterValue = newFilterStatus.target.value;
+    dispatch(setFilterStatus(filterValue));
+  };
+
   return (
     <>
       <p>Find contacts by name</p>
@@ -11,7 +18,3 @@ const Filter = ({ filtered }) => {
 };
 
 export default Filter;
-
-Filter.propsTypes = {
-  filtered: PropTypes.func,
-};

@@ -1,6 +1,28 @@
-import PropTypes from 'prop-types';
+import { addContact } from '../../redux/tasksSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts } from '../../redux/selectors';
 
-const ContactForm = ({ newContact }) => {
+const ContactForm = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+
+  const newContact = event => {
+    event.preventDefault();
+    const name = event.currentTarget['name'].value;
+    const number = event.currentTarget['number'].value;
+
+    if (contacts.some(check => check.name === name)) {
+      alert(`${name} is already in contacts.`);
+    } else if (contacts.some(check => check.number === number)) {
+      alert(`This number ${number} is already in contacts.`);
+    } else {
+      dispatch(addContact(name, number));
+    }
+    event.currentTarget.reset();
+
+    return;
+  };
+
   return (
     <>
       <form onSubmit={newContact}>
@@ -30,7 +52,3 @@ const ContactForm = ({ newContact }) => {
 };
 
 export default ContactForm;
-
-ContactForm.propTypes = {
-  newContact: PropTypes.func,
-};
